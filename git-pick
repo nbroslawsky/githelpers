@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+R=$1
+TO=$2
+cd ~/git
+if [ "$TO" ]; then
+	git co $TO;
+fi
+GITOUTPUT=`git log -1 $R | tail -n1`;
+GITOUTPUT=${GITOUTPUT##*/};
+GITOUTPUT=${GITOUTPUT%% *};
+MESSAGE=`git log -1 $R --pretty=format:'%B' | sed 'N;$!P;$!D;$d'`
+MESSAGE="cherry-pick of r${GITOUTPUT#*@} from ${GITOUTPUT%@*}:  $MESSAGE"
+echo "Commit Message: $MESSAGE"
+git cherry-pick $R --no-commit
+git ci -m"$MESSAGE"
