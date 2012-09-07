@@ -9,7 +9,7 @@
 	week = log --graph --date-order --pretty=format:'%Cred%h%Creset%C(yellow)%d%Creset %C(cyan)(%an)%Creset %s %Cgreen(%ar)%Creset' --since='last week'
 	month = log --graph --date-order --pretty=format:'%Cred%h%Creset%C(yellow)%d%Creset %C(cyan)(%an)%Creset %s %Cgreen(%ar)%Creset' --since='last month'
 	files = "!sh -c 'git log --oneline --name-status ${*} | egrep \"^[ADM]\" | sort -u' -"
-	ready = "!sh -c 'tmp=`git name-rev --name-only "$(git rev-parse ${1:-HEAD})"`; git lg ${tmp##svn/}..${1:-HEAD}' -"
+	ready = "!sh -c 'git lg `git rev-parse $(git name-rev --name-only ${1:-HEAD})@{u}`..${1:-HEAD}' -"
 	test = "!sh -c 'echo \"${*}\"' -"
 	pick = "!sh -c '~/bin/git-pick ${*}' -"
 [color]
