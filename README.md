@@ -1,19 +1,22 @@
 This repository contains a collection of helper functions and aliases that will hopefully make your git-driven life easier.
 
-First, ```git clone git@git.corp.yahoo.com:nbroslaw/githelpers.git ~/githelpers```
-After you set up your username and email globally, you'll have a .gitconfig file in your home directory:
-```
+First, `git clone git@git.corp.yahoo.com:nbroslaw/githelpers.git ~/githelpers`.
+
+Run the following commands to set up your username and email globally.
+After doing so you'll have a .gitconfig file in your home directory:
+
+``` bash
 git config --global user.name "Your Name"
 git config --global user.email "youremail@yahoo-inc.com"
 ```
 
-In that file, include the following (provided that you are using git 1.7.10+):
-```
-[include]
-    path = ~/githelpers/gitconfig
+Run the following command to allow git to pull our new configuration (provided that you are using git 1.7.10+):
+
+``` bash
+git config --global include.path "~/githelpers/gitconfig"
 ```
 
-Also, update your bash profile (~/.bash_profile) to include the init.sh script from this repo:
+Also, update your bash profile (`~/.bash_profile`) to include the init.sh script from this repo:
 ``` bash
 source 'githelpers/init.sh'
 ```
@@ -23,4 +26,4 @@ From there, a really handy way of decorating your prompt is to include the infor
 PS1="${YELLOW}\u@\h ${RESET}\W ${CYAN}\$(__git_ps1 '(%s) ')${RESET}\$ "
 ```
 
-(if you already have your PS1 set up the way you like it, the important thing in there is to add ```${CYAN}\$(__git_ps1 '(%s) ')${RESET}``` somewhere inside of it)
+(if you already have your PS1 set up the way you like it, the important thing in there is to add `${CYAN}\$(__git_ps1 '(%s) ')${RESET}` somewhere inside of it)
