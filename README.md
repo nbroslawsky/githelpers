@@ -22,3 +22,5 @@ From there, a really handy way of decorating your prompt is to include the infor
 ``` bash
 PS1="${YELLOW}\u@\h ${RESET}\W ${CYAN}\$(__git_ps1 '(%s) ')${RESET}\$ "
 ```
+
+(if you already have your PS1 set up the way you like it, the important thing in there is to add ```${CYAN}\$(__git_ps1 '(%s) ')${RESET}``` somewhere inside of it)
