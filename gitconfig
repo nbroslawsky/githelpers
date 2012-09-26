@@ -8,11 +8,11 @@
 	day = log --graph --date-order --pretty=format:'%Cred%h%Creset%C(yellow)%d%Creset %C(cyan)(%an)%Creset %s %Cgreen(%ar)%Creset' --since=yesterday
 	week = log --graph --date-order --pretty=format:'%Cred%h%Creset%C(yellow)%d%Creset %C(cyan)(%an)%Creset %s %Cgreen(%ar)%Creset' --since='last week'
 	month = log --graph --date-order --pretty=format:'%Cred%h%Creset%C(yellow)%d%Creset %C(cyan)(%an)%Creset %s %Cgreen(%ar)%Creset' --since='last month'
-	files = "!sh -c 'git log --oneline --name-status ${*} | egrep \"^[ADM]\" | sort -u' -"
 	ready = "!sh -c 'git lg `git rev-parse $(git name-rev --name-only ${1:-HEAD})@{u}`..${1:-HEAD}' -"
-	test = "!sh -c 'echo \"${*}\"' -"
 	pick = "!sh -c '~/bin/git-pick ${*}' -"
 [color]
 	ui = true
 [core]
 	whitespace = -space-before-tab
+[push]
+	default = current
