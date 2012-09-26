@@ -9,7 +9,7 @@
 	week = log --graph --date-order --pretty=format:'%Cred%h%Creset%C(yellow)%d%Creset %C(cyan)(%an)%Creset %s %Cgreen(%ar)%Creset' --since='last week'
 	month = log --graph --date-order --pretty=format:'%Cred%h%Creset%C(yellow)%d%Creset %C(cyan)(%an)%Creset %s %Cgreen(%ar)%Creset' --since='last month'
 	ready = "!sh -c 'git lg `git rev-parse $(git name-rev --name-only ${1:-HEAD})@{u}`..${1:-HEAD}' -"
-	pick = "!sh -c '~/bin/git-pick ${*}' -"
+	pick = "!sh -c './git-pick ${*}' -"
 [color]
 	ui = true
 [core]
