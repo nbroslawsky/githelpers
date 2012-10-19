@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Prints the name of the current local branch.
-function git-current-branch {
+function git_current_branch {
     # "git branch" prints a list of local branches, the current one being marked with a "*". Extract it.
     echo "`git branch | grep '*' | sed 's/* //'`"
 }
 
 # Prints the name of the remote branch (subversion trunk, branch or tag) tracked by the current local branch.
-function git-current-remote-branch {
+function git_current_remote_branch {
     # This is the current remote URL corresponding to the local branch
     current_url=`git svn info --url`
     # Obtain the URL parts corresponding to the base repository address, and the prefixes for the trunk, the branches, and the tags
@@ -51,13 +51,13 @@ function git-current-remote-branch {
 
 # Merge the changes from the current branch into another branch (either an existing local branch or a remote branch) and
 # commit them to the remote server. After that, switch back to the original branch.
-function git-svn-transplant-to {
-    current_branch=`git-current-branch`
+function git_svn_transplant_to {
+    current_branch=`git_current_branch`
     git checkout $1 && git merge $current_branch && git svn dcommit && git checkout $current_branch
 }
 
 # Remove a remote branch from the central server. Equivalent of "svn remove <branch> && svn commit".
-function git-svn-remove-branch {
+function git_svn_remove_branch {
     # Compute the location of the remote branches
     svnremote=`git config --list | grep "svn-remote.svn.url" | cut -d '=' -f 2`
     branches=$svnremote/`git config --list | grep branches | sed 's/.*branches=//' | sed 's/*:.*//'`
@@ -73,7 +73,7 @@ function git-svn-remove-branch {
 
 # Remove a remote tag from the central server. Equivalent of "svn remove <tag> && svn commit".
 # Note that removing tags is not recommended.
-function git-svn-remove-tag {
+function git_svn_remove_tag {
     svnremote=`git config --list | grep "svn-remote.svn.url" | cut -d '=' -f 2`
     tags=$svnremote/`git config --list | grep tags | sed 's/.*tags=//' | sed 's/*:.*//'`
     if [ "$2" == "-f" ]; then
@@ -86,7 +86,7 @@ function git-svn-remove-tag {
 }
 
 # Create a remote svn branch from the currently tracked one, and check it out in a new local branch.
-function git-svn-create-branch {
+function git_svn_create_branch {
     # Compute the location of the remote branches
     svnremote=`git config --list | grep "svn-remote.svn.url" | cut -d '=' -f 2`
     branches=$svnremote/`git config --list | grep branches | sed 's/.*branches=//' | sed 's/*:.*//'`
@@ -110,12 +110,12 @@ function git-svn-create-branch {
 }
 
 # Create a remote svn tag from the currently tracked branch/trunk.
-function git-svn-create-tag {
+function git_svn_create_tag {
     if [ "$2" == "-n" ]; then
         echo " ** Dry run only ** "
     fi
     # Determine the name of the current remote branch (or trunk)
-    source=`git-current-remote-branch -s`
+    source=`git_current_remote_branch -s`
     # Determine if there are local changes that are not pushed to the central server
     if ((git svn dcommit -n > /dev/null 2> /dev/null) && [[ "`git svn dcommit -n 2> /dev/null | grep diff-tree | wc -l`" == "0" ]]); then
         echo "Using $source as the source branch to tag"
@@ -143,13 +143,13 @@ function git-svn-create-tag {
 }
 
 # List the remote branches, as known locally by git.
-function git-svn-branches {
+function git_svn_branches {
     # List all known remote branches and filter out the trunk (named trunk) and the tags (which contain a / in their name)
     git branch -r | cut -d ' ' -f 3 | grep -E -v '^trunk(@.*)?$' | grep -v '/'
 }
 
 # List the remote tags, as known locally by git.
-function git-svn-tags {
+function git_svn_tags {
     # List all known remote branches and filter only the tags, which contain a / in their name
     git branch -r | cut -d ' ' -f 3 | grep '/' | cut -d '/' -f2
 }
@@ -157,7 +157,7 @@ function git-svn-tags {
 # Remove from the git references fake trunk remotes pointing to different versions.
 # These are created when the codebase was moved on SVN from one location to the other.
 # Their names look like "trunk@35107"
-function git-svn-prune-trunk {
+function git_svn_prune_trunk {
     # List the versioned trunk remotes
     to_remove=`git branch -r | grep --color=never 'trunk@'`
 
@@ -178,12 +178,12 @@ function git-svn-prune-trunk {
 }
 
 # Remove branches which no longer exist remotely from the local git references.
-function git-svn-prune-branches {
+function git_svn_prune_branches {
     # List the real remote and locally known remote branches
     svnremote=`git config --list | grep "svn-remote.svn.url" | cut -d '=' -f 2`
     branches=$svnremote/`git config --list | grep branches | sed 's/.*branches=//' | sed 's/*:.*//'`
     remote_branches=" `svn ls $branches | sed 's/\/$//'` "
-    local_branches=`git-svn-branches`
+    local_branches=`git_svn_branches`
 
     # Check each locally known remote branch
     for branch in $local_branches; do
@@ -212,12 +212,12 @@ function git-svn-prune-branches {
 }
 
 # Remove tags which no longer exist remotely from the local git references.
-function git-svn-prune-tags {
+function git_svn_prune_tags {
     # List the real remote and locally known remote tags
     svnremote=`git config --list | grep "svn-remote.svn.url" | cut -d '=' -f 2`
     tags=`git config --list | grep tags | sed 's/.*tags=//' | sed 's/*:.*//'`
     remote_tags=" `svn ls $svnremote/$tags | sed 's/\/$//'` "
-    local_tags=`git-svn-tags`
+    local_tags=`git_svn_tags`
 
     # Check each locally known remote tag
     for tag in $local_tags; do
@@ -245,10 +245,10 @@ function git-svn-prune-tags {
     fi
 }
 
-function git-svn-prune-remotes {
-    git-svn-prune-trunk ${1:--q}
-    git-svn-prune-branches ${1:--q}
-    git-svn-prune-tags ${1:--q}
+function git_svn_prune_remotes {
+    git_svn_prune_trunk ${1:--q}
+    git_svn_prune_branches ${1:--q}
+    git_svn_prune_tags ${1:--q}
 
     # If this was only a dry run, indicate how to actually prune
     if [[ "$1" != "-f" ]]; then
@@ -257,14 +257,14 @@ function git-svn-prune-remotes {
     fi
 }
 
-function git-svn-up {
+function git_svn_up {
     git stash && git svn rebase && git stash pop
 }
 
-function git-svn-convert-tags {
+function git_svn_convert_tags {
   #!/bin/sh
   #
-  # git-svn-convert-tags
+  # git_svn_convert_tags
   # Convert Subversion "tags" into Git tags
   for tag in `git branch -r | grep "  tags/" | sed 's/  tags\///'`; do
     GIT_COMMITTER_DATE="$(git log -1 --pretty=format:"%ad" tags/"$tag")"
@@ -277,8 +277,8 @@ function git-svn-convert-tags {
 }
 
 # Create a git branch for each remote SVN branch
-function git-svn-convert-branches {
-    for branch in `git-svn-branches`; do
+function git_svn_convert_branches {
+    for branch in `git_svn_branches`; do
         git branch "${branch}" "remotes/${branch}"
         git branch -rD "${branch}"
     done
@@ -287,8 +287,8 @@ function git-svn-convert-branches {
 # Remove tags that match the provided regular expression (Perl syntax).
 # The first parameter is mandatory and must be a regular expression of tag names to remove.
 # Only do a dry run, printing what would be removed, if the second parameter is missing or is not "-f"
-function git-svn-filter-tags {
-    svn_tags=`git-svn-tags`
+function git_svn_filter_tags {
+    svn_tags=`git_svn_tags`
     git_tags=`git tag`
 
     # Check each remote tag
@@ -327,8 +327,8 @@ function git-svn-filter-tags {
 # Remove branches that match the provided regular expression (Perl syntax).
 # The first parameter is mandatory and must be a regular expression of branch names to remove.
 # Only do a dry run, printing what would be removed, if the second parameter is missing or is not "-f"
-function git-svn-filter-branches {
-    svn_branches=`git-svn-branches`
+function git_svn_filter_branches {
+    svn_branches=`git_svn_branches`
     git_branches=`git branch`
 
     # Check each remote branch
@@ -382,7 +382,7 @@ function elementExists() {
 }
 
 
-function git-check-methods {
+function git_check_methods {
 
 	# set input field separator $IFS to end-of-line
 	ORIGIFS=$IFS
@@ -436,7 +436,7 @@ function git-check-methods {
 }
 
 
-function git-search-replace {
+function git_search_replace {
 	for i in `git grep -il "$1"`
 	do
 		echo $i;
@@ -444,6 +444,6 @@ function git-search-replace {
 	done
 }
 
-function git-pick() {
-	~/bin/git-pick $1 $2
+function git_pick() {
+	~/bin/git_pick $1 $2
 }
