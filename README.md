@@ -1,6 +1,9 @@
 This repository contains a collection of helper functions and aliases that will hopefully make your git-driven life easier.
 
-First, `git clone git@git.corp.yahoo.com:nbroslaw/githelpers.git ~/githelpers`.
+First, clone the githelpers repository:
+``` bash
+git clone git@git.corp.yahoo.com:nbroslaw/githelpers.git ~/githelpers
+```
 
 Run the following commands to set up your username and email globally.
 After doing so you'll have a .gitconfig file in your home directory:
