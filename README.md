@@ -29,4 +29,11 @@ From there, a really handy way of decorating your prompt is to include the infor
 PS1="${YELLOW}\u@\h ${RESET}\W ${CYAN}\$(__git_ps1 '(%s) ')${RESET}\$ "
 ```
 
+Also, if you are a yroot-user, it's handy to be able to see if you are in a yroot (and which one you're logged into). Something like this helps, placed immediately after your PS1 definition:
+``` bash
+if [ -h /.yroot ]; then
+  PS1="${GREEN}$(basename $(readlink /.yroot)) ${RESET}$PS1";
+fi
+```
+
 (if you already have your PS1 set up the way you like it, the important thing in there is to add `${CYAN}\$(__git_ps1 '(%s) ')${RESET}` somewhere inside of it)
