@@ -1,6 +1,9 @@
 This repository contains a collection of helper functions and aliases that will hopefully make your git-driven life easier.
 
-First, `git clone git@git.corp.yahoo.com:nbroslaw/githelpers.git ~/githelpers`.
+First, clone the githelpers repository:
+``` bash
+git clone git@git.corp.yahoo.com:nbroslaw/githelpers.git ~/githelpers
+```
 
 Run the following commands to set up your username and email globally.
 After doing so you'll have a .gitconfig file in your home directory:
@@ -24,6 +27,13 @@ source 'githelpers/init.sh'
 From there, a really handy way of decorating your prompt is to include the information about the repository that is checked out (eg. which branch, if there are modified files waiting to be staged, if there are staged changes, rebasing/merging status, etc.). The following looks good on a darker background (the color aliases are defined in ```colors```).
 ``` bash
 PS1="${YELLOW}\u@\h ${RESET}\W ${CYAN}\$(__git_ps1 '(%s) ')${RESET}\$ "
+```
+
+Also, if you are a yroot-user, it's handy to be able to see if you are in a yroot (and which one you're logged into). Something like this helps, placed immediately after your PS1 definition:
+``` bash
+if [ -h /.yroot ]; then
+  PS1="${GREEN}$(basename $(readlink /.yroot)) ${RESET}$PS1";
+fi
 ```
 
 (if you already have your PS1 set up the way you like it, the important thing in there is to add `${CYAN}\$(__git_ps1 '(%s) ')${RESET}` somewhere inside of it)
