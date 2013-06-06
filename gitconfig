@@ -10,6 +10,7 @@
 	month = log --graph --date-order --pretty=format:'%Cred%h%Creset%C(yellow)%d%Creset %C(cyan)(%an)%Creset %s %Cgreen(%ar)%Creset' --since='last month'
 	ready = "!sh -c 'git lg `git rev-parse $(git name-rev --name-only ${1:-HEAD})@{u}`..${1:-HEAD}' -"
 	pick = "!sh -c './git-pick ${*}' -"
+	pruny = "!sh -c 'git remote prune origin | tee /dev/tty | sed \"1,2d\" | awk -F\"/\" \"{print \\$2}\" | while read -r branch; do git show-ref \"$branch\">/dev/null && git branch -d \"$branch\"; done' -"
 [color]
 	ui = true
 [core]
