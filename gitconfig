@@ -3,6 +3,7 @@
 	st = status
 	ci = commit
 	search = grep -i --color -n
+	search-literal = grep --color -n
 	last = log -1 --decorate
 	lg = log --graph --date-order --pretty=format:'%Cred%h%Creset%C(yellow)%d%Creset %C(cyan)(%an)%Creset %s %Cgreen(%ar)%Creset'
 	day = log --graph --date-order --pretty=format:'%Cred%h%Creset%C(yellow)%d%Creset %C(cyan)(%an)%Creset %s %Cgreen(%ar)%Creset' --since=yesterday
