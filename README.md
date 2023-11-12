@@ -1,5 +1,7 @@
 # This repository contains a collection of helper functions and aliases that will hopefully make your git-driven life easier.
 
+See gitconfig file for useful commands
+
 ## Setup Instructions for Zsh
 
 1. Clone the githelpers repository:
