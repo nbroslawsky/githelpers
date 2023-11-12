@@ -1,60 +1,32 @@
-DULL=0
-BRIGHT=1
-
-FG_BLACK=30
-FG_RED=31
-FG_GREEN=32
-FG_YELLOW=33
-FG_BLUE=34
-FG_VIOLET=35
-FG_CYAN=36
-FG_WHITE=37
-
-FG_NULL=00
-
-BG_BLACK=40
-BG_RED=41
-BG_GREEN=42
-BG_YELLOW=43
-BG_BLUE=44
-BG_VIOLET=45
-BG_CYAN=46
-BG_WHITE=47
-
-BG_NULL=00
-
-##
 # ANSI Escape Commands
-##
-ESC="%{[00m%}"
+ESC="%{\033[m%}"
 NORMAL="${ESC}"
-RESET="%{[00;37;00m%}"
+RESET="%{\033[0m%}"
 
-##
-# Shortcuts for Colored Text ( Bright and FG Only )
-##
+# Shortcuts for Colored Text (Bright and FG Only)
+YELLOW="%F{yellow}"
+CYAN="%F{cyan}"
+
+# Shortcuts for Colored Text (Bright and FG Only)
 
 # DULL TEXT
-
-BLACK="%{[00;30m%}"
-RED="%{[00;31m%}"
-GREEN="%{[00;32m%}"
-YELLOW="%{[00;33m%}"
-BLUE="%{[00;34m%}"
-VIOLET="%{[00;35m%}"
-CYAN="%{[00;36m%}"
-WHITE="%{[00;37m%}"
+BLACK="%F{black}"
+RED="%F{red}"
+GREEN="%F{green}"
+BLUE="%F{blue}"
+VIOLET="%F{magenta}"
+WHITE="%F{white}"
 
 # BRIGHT TEXT
-BRIGHT_BLACK="%{[01;30m%}"
-BRIGHT_RED="%{[01;31m%}"
-BRIGHT_GREEN="%{[01;32m%}"
-BRIGHT_YELLOW="%{[01;33m%}"
-BRIGHT_BLUE="%{[01;34m%}"
-BRIGHT_VIOLET="%{[01;35m%}"
-BRIGHT_CYAN="%{[01;36m%}"
-BRIGHT_WHITE="%{[01;37m%}"
+BRIGHT_BLACK="%F{black}"
+BRIGHT_RED="%F{red}"
+BRIGHT_GREEN="%F{green}"
+BRIGHT_YELLOW="%F{yellow}"
+BRIGHT_BLUE="%F{blue}"
+BRIGHT_VIOLET="%F{magenta}"
+BRIGHT_CYAN="%F{cyan}"
+BRIGHT_WHITE="%F{white}"
 
 # REV TEXT as an example
-REV_CYAN="%{[00;37;46m%}"
-REV_RED="%{[01;33;41m%}"
+REV_CYAN="%F{white}%K{cyan}"
+REV_RED="%F{yellow}%K{red}"

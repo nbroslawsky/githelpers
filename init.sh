@@ -1,5 +1,4 @@
 #!/bin/zsh
-emulate -LR zsh
 
 DIR="$(cd "$(dirname "${(%):-%x}")" && pwd)"
 source $DIR/colors
