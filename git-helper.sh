@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 # Prints the name of the current local branch.
 function git_current_branch {
@@ -17,7 +17,7 @@ function git_current_remote_branch {
     tags_url=$base_url/`git config --list | grep tags | sed 's/.*tags=//' | sed 's/*:.*//'`
     # Check if the current URL matches the trunk URL
     if [ $trunk_url == $current_url ]; then
-        if [ "$1" == "-s" ]; then
+        if [ "$1" = "-s" ]; then
             echo "trunk"
         else
             echo "You are on trunk"
@@ -26,7 +26,7 @@ function git_current_remote_branch {
     elif [ `echo $current_url | grep $branches_url` ]; then
         # Escape / in order to use the URL as a regular expression in sed
         escaped_prefix=`echo $branches_url | sed 's/\//\\\\\//g'`
-        if [ "$1" == "-s" ]; then
+        if [ "$1" = "-s" ]; then
             echo `echo $current_url | sed "s/$escaped_prefix//"`
         else
             echo You are on branch `echo $current_url | sed "s/$escaped_prefix//"`
@@ -35,13 +35,13 @@ function git_current_remote_branch {
     elif [ `echo $current_url | grep $tags_url` ]; then
         # Escape / in order to use the URL as a regular expression in sed
         escaped_prefix=`echo $tags_url | sed 's/\//\\\\\//g'`
-        if [ "$1" == "-s" ]; then
+        if [ "$1" = "-s" ]; then
             echo `echo $current_url | sed "s/$escaped_prefix//"`
         else
             echo You are on tag `echo $current_url | sed "s/$escaped_prefix//"`
         fi
     else
-        if [ "$1" == "-s" ]; then
+        if [ "$1" = "-s" ]; then
             echo "unknown"
         else
             echo "You are on an unknown remote branch"
@@ -61,7 +61,7 @@ function git_svn_remove_branch {
     # Compute the location of the remote branches
     svnremote=`git config --list | grep "svn-remote.svn.url" | cut -d '=' -f 2`
     branches=$svnremote/`git config --list | grep branches | sed 's/.*branches=//' | sed 's/*:.*//'`
-    if [ "$2" == "-f" ]; then
+    if [ "$2" = "-f" ]; then
         # Remove the branch using svn
         svn rm "$branches$1" -m "Removing branch $1"
     else
@@ -76,7 +76,7 @@ function git_svn_remove_branch {
 function git_svn_remove_tag {
     svnremote=`git config --list | grep "svn-remote.svn.url" | cut -d '=' -f 2`
     tags=$svnremote/`git config --list | grep tags | sed 's/.*tags=//' | sed 's/*:.*//'`
-    if [ "$2" == "-f" ]; then
+    if [ "$2" = "-f" ]; then
         svn rm "$tags$1" -m "Removing tag $1"
     else
         echo "Would remove tag $tag$1"
@@ -93,7 +93,7 @@ function git_svn_create_branch {
     destination=$branches$1
     # Determine the current remote branch (or trunk)
     current=`git svn info --url`
-    if [ "$2" == "-n" ]; then
+    if [ "$2" = "-n" ]; then
         echo " ** Dry run only ** "
         echo "svn cp $current $destination -m \"creating branch\""
         echo "git svn fetch"
@@ -111,13 +111,14 @@ function git_svn_create_branch {
 
 # Create a remote svn tag from the currently tracked branch/trunk.
 function git_svn_create_tag {
-    if [ "$2" == "-n" ]; then
+    if [ "$2" = "-n" ]; then
         echo " ** Dry run only ** "
     fi
     # Determine the name of the current remote branch (or trunk)
     source=`git_current_remote_branch -s`
     # Determine if there are local changes that are not pushed to the central server
-    if ((git svn dcommit -n > /dev/null 2> /dev/null) && [[ "`git svn dcommit -n 2> /dev/null | grep diff-tree | wc -l`" == "0" ]]); then
+    if git svn dcommit -n > /dev/null 2> /dev/null && [[ "$(git svn dcommit -n 2> /dev/null | grep diff-tree | wc -l)" == "0" ]]; then
+
         echo "Using $source as the source branch to tag"
     else
         echo "Local branch contains changes, please push to the svn repository or checkout a clean branch."
@@ -129,7 +130,7 @@ function git_svn_create_tag {
     destination=$tags$1
     # Determine the remote URL of the current branch
     current=`git svn info --url`
-    if [ "$2" == "-n" ]; then
+    if [ "$2" = "-n" ]; then
         echo "svn cp $current $destination -m \"creating tag $1 from $source\""
         echo "git svn fetch"
         echo "Would create tag $1 from $source at $destination"
@@ -163,7 +164,7 @@ function git_svn_prune_trunk {
 
     # Check each locally known remote branch
     for branch in $to_remove; do
-        if [[ "$1" == "-f" ]]; then
+        if [[ "$1" = "-f" ]]; then
             git branch -r -D $branch
         else
             echo "Would remove $branch"
@@ -196,7 +197,7 @@ function git_svn_prune_branches {
         done
         # If not found, remove it
         if [[ $found == 0 ]]; then
-            if [[ "$1" == "-f" ]]; then
+            if [[ "$1" = "-f" ]]; then
                 git branch -r -D $branch
             else
                 echo "Would remove $branch"
@@ -229,8 +230,8 @@ function git_svn_prune_tags {
             fi
         done
         # If not found, remove it
-        if [[ $found == 0 ]]; then
-            if [[ "$1" == "-f" ]]; then
+        if [[ $found = 0 ]]; then
+            if [[ "$1" = "-f" ]]; then
                 git branch -r -D tags/$tag
             else
                 echo "Would remove tags/$tag"
@@ -296,7 +297,7 @@ function git_svn_filter_tags {
         found=`echo $tag | grep -P $1`
         # If it matches, remove it
         if [[ -n $found ]]; then
-            if [[ "$2" == "-f" ]]; then
+            if [[ "$2" = "-f" ]]; then
                 git branch -D -r tags/$tag
             else
                 echo "Would remove remote tags/$tag"
@@ -309,7 +310,7 @@ function git_svn_filter_tags {
         found=`echo $tag | grep -P $1`
         # If it matches, remove it
         if [[ -n $found ]]; then
-            if [[ "$2" == "-f" ]]; then
+            if [[ "$2" = "-f" ]]; then
                 git tag -d $tag
             else
                 echo "Would remove tag $tag"
@@ -336,7 +337,7 @@ function git_svn_filter_branches {
         found=`echo $branch | grep -P $1`
         # If it matches, remove it
         if [[ -n $found ]]; then
-            if [[ "$2" == "-f" ]]; then
+            if [[ "$2" = "-f" ]]; then
                 git branch -D -r $branch
             else
                 echo "Would remove remote branch $branch"
