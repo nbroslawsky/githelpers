@@ -12,6 +12,17 @@
 	ready = "!sh -c 'git lg `git rev-parse $(git name-rev --name-only ${1:-HEAD})@{u}`..${1:-HEAD}' -"
 	pick = "!sh -c './git-pick ${*}' -"
 	pruny = "!sh -c 'git remote prune origin | tee /dev/tty | sed \"1,2d\" | awk -F\"/\" \"{print \\$2}\" | while read -r branch; do git show-ref \"$branch\">/dev/null && git branch -d \"$branch\"; done' -"
+
+	# Modern aliases
+	sw = switch
+	br = branch
+	unstage = reset HEAD --
+	amend = commit --amend --no-edit
+	stash-all = stash push --include-untracked
+	wip = "!git add -A && git commit -m 'WIP [skip ci]'"
+	unwip = "!git log -1 --format='%s' | grep -q 'WIP' && git reset HEAD~1"
+	aliases = "!git config --get-regexp '^alias\\.' | sed 's/^alias\\.//; s/ /\\t/' | sort | column -t -s $'\\t'"
+	branches = "for-each-ref --sort=-committerdate refs/heads/ --format='%(committerdate:relative)\t%(refname:short)'"
 [color]
 	ui = true
 [core]

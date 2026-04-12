@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# githelpers CLI - manage your git workflow setup
+GITHELPERS_ROOT="$(cd "$(dirname "$0")" && pwd)"
+cd "$GITHELPERS_ROOT" && exec python3 -m cli "$@"
